@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>剧本示例 | 人生剧本生成器</title>
+  <style>
+    :root {
+      --primary-black: #121212;
+      --secondary-black: #1e1e1e;
+      --accent-black: #2d2d2d;
+      --primary-gold: #7b2cbf; /* 深紫色 */
+      --secondary-gold: #9d4edd; /* 亮紫色 */
+      --accent-gold: #c77dff; /* 浅紫色 */
+      --star-color: #ffffff;
+      --line-color: rgba(255, 255, 255, 0.8);
+      --bg-blue: #0a0322; /* 深蓝紫色背景 */
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+      background-color: var(--bg-blue);
+      color: white;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* 星空背景 */
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      background: #000000; /* 纯黑色背景 */
+    }
+    
+    /* 星星样式 */
+    .star {
+      position: absolute;
+      background-color: rgba(220, 235, 255, 0.9); /* 蓝白色调 */
+      border-radius: 50%;
+      box-shadow: 0 0 5px 1px rgba(135, 206, 250, 0.6); /* 蓝色光晕 */
+      animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+    }
+    
+    @keyframes twinkle {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+        box-shadow: 0 0 3px 1px rgba(135, 206, 250, 0.4);
+      }
+      50% {
+        opacity: var(--brightness, 0.9);
+        transform: scale(1.1);
+        box-shadow: 0 0 6px 2px rgba(135, 206, 250, 0.8);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.5);
+        box-shadow: 0 0 3px 1px rgba(135, 206, 250, 0.4);
+      }
+    }
+    
+    /* 星座连线动画 */
+    @keyframes lineTwinkle {
+      0% {
+        opacity: 0.5;
+        filter: blur(1px);
+      }
+      50% {
+        opacity: 1;
+        filter: blur(0.5px);
+      }
+      100% {
+        opacity: 0.5;
+        filter: blur(1px);
+      }
+    }
+    
+    .constellation-line {
+      position: absolute;
+      height: 1.5px;
+      background: linear-gradient(90deg, rgba(123, 44, 191, 0), rgba(123, 44, 191, 0.7), rgba(123, 44, 191, 0));
+      transform-origin: 0 0;
+      pointer-events: none;
+      box-shadow: 0 0 5px 1px rgba(123, 44, 191, 0.5);
+      animation: lineTwinkle 5s infinite;
+    }
+    
+    /* 主星特效 */
+    .main-star {
+      position: absolute;
+      background-color: rgba(245, 235, 255, 1);
+      border-radius: 50%;
+      box-shadow: 0 0 15px 5px rgba(123, 44, 191, 0.9);
+      animation: mainStarTwinkle var(--duration, 4s) infinite var(--delay, 0s);
+      z-index: 2;
+    }
+    
+    @keyframes mainStarTwinkle {
+      0% {
+        opacity: 0.8;
+        box-shadow: 0 0 10px 3px rgba(123, 44, 191, 0.7);
+      }
+      50% {
+        opacity: 1;
+        box-shadow: 0 0 15px 4px rgba(123, 44, 191, 0.9);
+      }
+      100% {
+        opacity: 0.8;
+        box-shadow: 0 0 10px 3px rgba(123, 44, 191, 0.7);
+      }
+    }
+    
+    /* 渐入动画 */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-out forwards;
+    }
+    
+    .animate-fadeIn-delay-1 {
+      animation: fadeIn 1s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+    
+    .animate-fadeIn-delay-2 {
+      animation: fadeIn 1s ease-out 0.6s forwards;
+      opacity: 0;
+    }
+    
+    /* 模态框样式 */
+    .script-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+    
+    .script-modal-content {
+      width: 90%;
+      max-width: 900px;
+      max-height: 90vh;
+      background-color: rgba(20, 20, 30, 0.95);
+      border: 1px solid var(--primary-gold);
+      border-radius: 10px;
+      padding: 40px;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 0 30px rgba(123, 44, 191, 0.3);
+    }
+    
+    .close-modal {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: var(--primary-gold);
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 2010;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(20, 20, 30, 0.8);
+      border-radius: 50%;
+      border: 1px solid var(--primary-gold);
+      box-shadow: 0 0 10px rgba(123, 44, 191, 0.5);
+    }
+    
+    .close-modal:hover {
+      transform: scale(1.2);
+      background-color: rgba(30, 30, 40, 0.9);
+      box-shadow: 0 0 15px rgba(123, 44, 191, 0.7);
+    }
+    
+    .full-script {
+      color: #fff;
+      line-height: 1.8;
+    }
+    
+    .full-script h2 {
+      font-size: 28px;
+      color: var(--primary-gold);
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    
+    .full-script h3 {
+      font-size: 18px;
+      color: #aaa;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: normal;
+    }
+    
+    .script-act {
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(123, 44, 191, 0.2);
+    }
+    
+    .script-act:last-child {
+      border-bottom: none;
+    }
+    
+    .script-act h4 {
+      font-size: 22px;
+      color: var(--primary-gold);
+      margin-bottom: 20px;
+    }
+    
+    .script-act p {
+      margin-bottom: 15px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    
+    .script-act strong {
+      color: var(--primary-gold);
+      font-weight: bold;
+    }
+    
+    /* 自定义滚动条样式 */
+    .script-modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .script-modal-content::-webkit-scrollbar-track {
+      background: rgba(30, 30, 30, 0.5);
+      border-radius: 10px;
+    }
+    
+    .script-modal-content::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, var(--primary-gold), var(--secondary-gold));
+      border-radius: 10px;
+      border: 2px solid rgba(30, 30, 30, 0.5);
+    }
+    
+    .script-modal-content::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary-gold);
+    }
+    
+    /* 适用于Firefox */
+    .script-modal-content {
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-gold) rgba(30, 30, 30, 0.5);
+    }
+    
+    /* 全局滚动条样式 */
+    body::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    body::-webkit-scrollbar-track {
+      background: rgba(10, 10, 25, 0.8);
+    }
+    
+    body::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, rgba(123, 44, 191, 0.7), rgba(191, 140, 255, 0.7));
+      border-radius: 5px;
+    }
+    
+    body::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(to bottom, rgba(123, 44, 191, 0.9), rgba(191, 140, 255, 0.9));
+    }
+    
+    /* Firefox的全局滚动条 */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-gold) rgba(10, 10, 25, 0.8);
+    }
+    
+    /* 布局样式 */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* 导航栏 */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+      background-color: rgba(10, 10, 25, 0.8);
+      backdrop-filter: blur(10px);
+    }
+    
+    header.scrolled {
+      background-color: rgba(10, 10, 25, 0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(123, 44, 191, 0.2);
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+      transition: color 0.3s;
+    }
+    
+    .logo:hover {
+      color: var(--primary-gold);
+    }
+    
+    .logo-icon {
+      font-size: 24px;
+      color: var(--primary-gold);
+    }
+    
+    .logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .home-arrow {
+      margin-right: 10px;
+      font-size: 28px;
+      color: var(--primary-gold);
+      text-decoration: none;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(123, 44, 191, 0.1);
+      border: 1px solid rgba(123, 44, 191, 0.3);
+    }
+    
+    .home-arrow:hover {
+      transform: translateX(-5px);
+      color: var(--secondary-gold);
+      background-color: rgba(123, 44, 191, 0.2);
+      box-shadow: 0 0 15px rgba(123, 44, 191, 0.5);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 40px;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary-gold);
+    }
+    
+    /* 主要内容 */
+    .examples-section {
+      padding-top: 150px;
+      margin-top: -30px;
+      padding-bottom: 80px;
+    }
+    
+    .examples-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    
+    .examples-header h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .examples-header p {
+      font-size: 18px;
+      color: #aaa;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    
+    .example-card {
+      background-color: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(123, 44, 191, 0.4);
+      border-radius: 12px;
+      padding: 25px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .example-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .example-title {
+      font-size: 22px;
+      color: var(--primary-gold);
+      margin-bottom: 12px;
+    }
+    
+    .example-details {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+    
+    .example-preview {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    
+    .read-more {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+      border-radius: 30px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    
+    .read-more:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(123, 44, 191, 0.4);
+    }
+    
+    /* 页脚 */
+    footer {
+      background-color: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(123, 44, 191, 0.2);
+      padding: 60px 0 30px;
+      margin-top: auto;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-col h3 {
+      font-size: 18px;
+      color: var(--primary-gold);
+      margin-bottom: 20px;
+    }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-col a {
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+    }
+    
+    .footer-col a:hover {
+      color: var(--primary-gold);
+    }
+    
+    .footer-col a .icon {
+      color: var(--primary-gold);
+      margin-right: 8px;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #333;
+      color: #666;
+    }
+    
+    /* 响应式样式 */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 星空背景 -->
+  <div id="stars-container" class="stars-container">
+    <div class="stars"></div>
+  </div>
+  
+  <!-- 页面内容 -->
+  <div class="content-wrapper">
+    <!-- 导航栏 -->
+    <header id="header">
+      <div class="navbar">
+        <div style="display: flex; align-items: center;">
+          <a href="index.html" class="home-arrow" title="返回首页">←</a>
+          <a href="index.html" class="logo">
+            <div class="logo-icon">✧</div>
+            <h1>人生剧本</h1>
+          </a>
+        </div>
+        
+        <nav class="nav-links">
+          <a href="index.html" class="nav-link">首页</a>
+          <a href="about.html" class="nav-link">关于</a>
+          <a href="examples.html" class="nav-link">示例</a>
+        </nav>
+      </div>
+    </header>
+    
+    <!-- 示例部分 -->
+    <section class="examples-section">
+      <div class="container">
+        <div class="examples-header animate-fadeIn">
+          <h2>剧本示例</h2>
+          <p>浏览我们的精选剧本，获取灵感</p>
+        </div>
+        
+        <div class="examples-grid">
+          <div class="example-card animate-fadeIn-delay-1">
+            <h3 class="example-title">满崽，来自洞庭湖的回信</h3>
+            <p class="example-details">创作于2025年 | 探索型剧本</p>
+            <p class="example-preview">
+              "梦境中，你站在老家的院子里。百年槐树的影子铺满整个院落，奶奶蹲在门槛上揉着槐花面团。你知道这是梦，因为奶奶已经不在了。电话未接，记忆未消，回到故乡的呼唤从未停止..."
+            </p>
+            <a href="#" class="read-more">阅读全文</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h3>关于我们</h3>
+            <p>
+              人生剧本生成器致力于帮助人们探索人生的无限可能性，发现自我价值，实现个人成长。
+            </p>
+          </div>
+          
+          <div class="footer-col">
+            <h3>快速链接</h3>
+            <ul>
+              <li><a href="index.html">首页</a></li>
+              <li><a href="about.html">关于</a></li>
+              <li><a href="examples.html">示例</a></li>
+              <li><a href="#">常见问题</a></li>
+              <li><a href="#">联系我们</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-col">
+            <h3>联系方式</h3>
+            <ul>
+              <li>
+                <a href="mailto:contact@lifescript.com">
+                  <span class="icon">✉</span> contact@lifescript.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+86123456789">
+                  <span class="icon">☎</span> +86 123 456 789
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span class="icon">♦</span> 社交媒体
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; <script>document.write(new Date().getFullYear())</script> 人生剧本生成器. 保留所有权利.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 滚动监听
+      const header = document.getElementById('header');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 10) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+      
+      // 创建星空背景
+      createStarryBackground();
+      
+      // 添加阅读全文功能
+      const readMoreBtn = document.querySelector('.read-more');
+      readMoreBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showFullScript();
+      });
+      
+      // 显示完整剧本的函数
+      function showFullScript() {
+        // 创建模态框
+        const modal = document.createElement('div');
+        modal.classList.add('script-modal');
+        
+        // 创建模态框内容
+        const modalContent = document.createElement('div');
+        modalContent.classList.add('script-modal-content');
+        
+        // 创建关闭按钮
+        const closeBtn = document.createElement('span');
+        closeBtn.classList.add('close-modal');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.addEventListener('click', function() {
+          document.body.removeChild(modal);
+          document.body.style.overflow = 'auto';
+        });
+        
+        // 创建剧本内容
+        const scriptContent = document.createElement('div');
+        scriptContent.classList.add('full-script');
+        scriptContent.innerHTML = `
+          <h2>《满崽，来自洞庭湖的回信》</h2>
+          <h3>——给27岁的你，一封来自故乡的信</h3>
+          
+          <div class="script-act">
+            <h4>第一幕：槐花未落，电话未接</h4>
+            <p>梦境中，你站在老家的院子里。</p>
+            <p>百年槐树的影子铺满整个院落，阳光透过枝叶，筛下一片片细碎的金光。</p>
+            <p>奶奶蹲在门槛上，手里捏着一团面团，往里面细细地揉进槐花。</p>
+            <p>她抬头看你，笑着说："满崽，快去把那头发夹好，一会儿槐花饼炸好了，糊你一头油。"</p>
+            <p>你却怔怔地站着，喉咙像被什么东西堵住了。</p>
+            <p>你知道这是梦。</p>
+            <p>因为奶奶已经不在了。</p>
+            <p>可你不敢说破，只是小心翼翼地，想多看她一眼。</p>
+            <p>锅里的油开始滋滋作响，热气氤氲。</p>
+            <p>你忽然听到熟悉的手机铃声——是那台 诺基亚1208，屏幕上跳动着 "奶奶" 两个字。</p>
+            <p>23个未接来电，在梦里，终于响了回来。</p>
+            <p>你颤抖着伸手去接，可指尖刚触碰到屏幕——</p>
+            <p>一切，塌陷了。</p>
+            <p>院落消失，槐花散落，手机坠入黑暗。</p>
+            <p>你猛然惊醒，窗外，上海凌晨三点的轮渡汽笛声，长长地划破夜空。</p>
+            <p>你摸索着抓起床头的水杯，却发现指尖是湿的——眼泪不知什么时候落了下来。</p>
+          </div>
+          
+          <div class="script-act">
+            <h4>第二幕：白日梦游者</h4>
+            <p>你盯着天花板，脑海里仍回响着奶奶的声音。</p>
+            <p>你翻身下床，赤脚走到阳台，俯瞰着灯火不眠的陆家嘴。</p>
+            <p>手机屏幕亮了一下，是未读邮件提醒。</p>
+            <p>【高盛亚洲区新晋VP名单公示】</p>
+            <p>你的名字赫然在列。</p>
+            <p>这本该是你梦寐以求的东西。</p>
+            <p>可是此刻，你却像个梦游者一样，感受不到丝毫的喜悦。</p>
+            <p>你的身体坐在陆家嘴的办公大楼里，穿着量身定制的衬衫和高跟鞋，在 Excel 里预测着别人的资产增值。</p>
+            <p>可是你的灵魂，却仿佛被遗落在洞庭湖的风里，卡在 18 岁的那个夏天——</p>
+            <p>那个你撕碎了<strong>《洞庭水鬼录》</strong>的夜晚。</p>
+          </div>
+          
+          <div class="script-act">
+            <h4>第三幕：信使与回信</h4>
+            <p>你的电脑屏幕，停留在豆瓣话题 #洞庭遗梦#。</p>
+            <p>5872条人生碎片，被你一条条收藏，像是在替自己拼凑某种遗失的东西。</p>
+            <p>你忽然想起，有个陌生人留言问你：</p>
+            <p>"如果水鬼真的存在，它们会去哪里？"</p>
+            <p>你当时随手回复了一句：</p>
+            <p>"会在某个不被打捞的梦里，等着被记起。"</p>
+            <p>可是，轮到你自己呢？</p>
+            <p>你能等谁来打捞你？</p>
+            <p>鼠标游移片刻，你鬼使神差地打开了招商银行的保险箱预约系统。</p>
+            <p>十分钟后，你走进冷白色调的银行房间。</p>
+            <p>指纹验证通过，保险柜门打开，里面静静地躺着一本已经泛黄的手稿残页——</p>
+            <p>《洞庭水鬼录》。</p>
+            <p>还有那部你从未敢打开的 诺基亚1208。</p>
+            <p>你犹豫片刻，按下了开机键。</p>
+            <p>屏幕闪烁几秒，卡顿了一下，终于恢复了亮光。</p>
+            <p>未读语音 1 条。</p>
+            <p>你深吸一口气，按下播放键。</p>
+            <p>奶奶的声音，穿越时间，轻轻地响起：</p>
+            <p>"满崽，奶奶知道你很忙，接不到电话也没事。"</p>
+            <p>"就想问你，想吃槐花饼不？奶奶给你留了一块，放在你床头……"</p>
+            <p>声音忽然停顿了一下。</p>
+            <p>然后，她像是有些怔忪地，轻声笑了笑：</p>
+            <p>"你看，我又忘了……你早就不在家了。"</p>
+            <p>你手一松，手机落在保险柜里，发出清脆的声响。</p>
+            <p>你捂住嘴，眼泪止不住地掉了下来。</p>
+          </div>
+          
+          <div class="script-act">
+            <h4>第四幕：归去来兮</h4>
+            <p>你的人生，真的只能是这样吗？</p>
+            <p>你以为你已经走得很远，远到洞庭湖的风再也吹不到你。</p>
+            <p>可是，你忘了，湖水有潮汐，湖风有归期。</p>
+            <p>你在 Excel 里看见银色刀鱼游动，不是幻觉——</p>
+            <p>是你心底的某个信号，在告诉你 "回去吧"。</p>
+            <p>回到哪里？</p>
+            <p>回到那个你真正想成为的人那里。</p>
+            <p>你的鼠标游移在 "高盛 VP 晋升确认邮件" 上，指尖有些发凉。</p>
+            <p>然后，你颤抖着，按下了拒绝。</p>
+            <p>随即，你打开手机，点开了房产中介的对话框，输入了一句话——</p>
+            <p>"请帮我找岳阳老城区的门面房，最好带院子。"</p>
+            <p>信息发送的瞬间，你的胸腔仿佛被一股温热的气流填满。</p>
+            <p>那感觉，像是某种迟来的春潮，终于淹没了你所有的犹疑和恐惧。</p>
+            <p>你想象着，未来的某一天——</p>
+            <p>你站在自己的书店门口，桌上摆着一本重新装订的《洞庭水鬼录》。</p>
+            <p>书页翻开，槐花的气息，轻轻飘出。</p>
+          </div>
+          
+          <div class="script-act">
+            <h4>尾声：致满崽</h4>
+            <p>📩 "满崽，未来的你，给现在的你留了一句话。"</p>
+            <p>"人可以背叛自己的理想一次，但不能背叛它一生。"</p>
+            <p>"回去吧，槐花开了。"</p>
+          </div>
+        `;
+        
+        // 组装模态框
+        modal.appendChild(closeBtn);
+        modalContent.appendChild(scriptContent);
+        modal.appendChild(modalContent);
+        
+        // 添加到页面
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden'; // 禁止背景滚动
+      }
+      
+      // 星空背景函数
+      function createStarryBackground() {
+        const container = document.getElementById('stars-container');
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // 创建背景星星
+        const starCount = Math.floor(width * height / 6000);
+        
+        for (let i = 0; i < starCount; i++) {
+          createStar(container, width, height, 'small');
+        }
+        
+        // 添加一些大星星
+        const largeStarCount = Math.floor(starCount * 0.1);
+        
+        for (let i = 0; i < largeStarCount; i++) {
+          createStar(container, width, height, 'large');
+        }
+        
+        // 添加星座
+        createConstellation(container, width, height);
+      }
+      
+      function createStar(container, width, height, size) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // 随机位置
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        
+        // 根据大小设置尺寸
+        let starSize, colors, brightness, duration;
+        
+        if (size === 'large') {
+          starSize = Math.random() * 2 + 4; // 4-6px
+          colors = [
+            'rgba(220, 240, 255, 1)',
+            'rgba(190, 225, 255, 1)',
+            'rgba(160, 210, 255, 1)'
+          ];
+          brightness = Math.random() * 0.2 + 0.8;
+          duration = Math.random() * 6 + 4;
+        } else {
+          starSize = Math.random() * 2 + 2; // 2-4px
+          colors = [
+            'rgba(220, 235, 255, 0.9)',
+            'rgba(200, 220, 255, 0.9)',
+            'rgba(180, 210, 255, 0.9)',
+            'rgba(240, 245, 255, 0.9)'
+          ];
+          brightness = Math.random() * 0.4 + 0.6;
+          duration = Math.random() * 5 + 3;
+        }
+        
+        // 设置样式
+        star.style.width = `${starSize}px`;
+        star.style.height = `${starSize}px`;
+        star.style.left = `${x}px`;
+        star.style.top = `${y}px`;
+        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // 设置动画参数
+        star.style.setProperty('--brightness', brightness);
+        star.style.setProperty('--duration', `${duration}s`);
+        star.style.setProperty('--delay', `${Math.random() * 5}s`);
+        
+        container.appendChild(star);
+      }
+      
+      function createConstellation(container, width, height) {
+        // 创建一个星座在右侧
+        const starPositions = [
+          { x: 0.85, y: 0.3, size: 4 },
+          { x: 0.8, y: 0.25, size: 3 },
+          { x: 0.75, y: 0.35, size: 3.5 },
+          { x: 0.8, y: 0.4, size: 4 },
+          { x: 0.85, y: 0.45, size: 3 }
+        ];
+        
+        const lines = [[0,1], [1,2], [2,3], [3,4], [4,0]];
+        
+        // 创建星星
+        starPositions.forEach((pos, index) => {
+          const star = document.createElement('div');
+          star.classList.add('main-star');
+          
+          const x = pos.x * width;
+          const y = pos.y * height;
+          const size = pos.size * 1.5;
+          
+          star.style.width = `${size}px`;
+          star.style.height = `${size}px`;
+          star.style.left = `${x}px`;
+          star.style.top = `${y}px`;
+          
+          const duration = Math.random() * 3 + 4;
+          const delay = Math.random() * 2;
+          
+          star.style.setProperty('--duration', `${duration}s`);
+          star.style.setProperty('--delay', `${delay}s`);
+          
+          container.appendChild(star);
+        });
+        
+        // 创建连线
+        lines.forEach(link => {
+          const pos1 = starPositions[link[0]];
+          const pos2 = starPositions[link[1]];
+          
+          const x1 = pos1.x * width;
+          const y1 = pos1.y * height;
+          const x2 = pos2.x * width;
+          const y2 = pos2.y * height;
+          
+          const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+          
+          const line = document.createElement('div');
+          line.classList.add('constellation-line');
+          
+          line.style.width = `${length}px`;
+          line.style.left = `${x1}px`;
+          line.style.top = `${y1}px`;
+          line.style.transform = `rotate(${angle}rad)`;
+          
+          container.appendChild(line);
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

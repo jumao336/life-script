@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 18, 18, 18;
+  --primary-gold: 212, 175, 55;
+  --secondary-gold: 255, 223, 0;
+  --bg-blue: 3, 11, 46;
+  --primary-black: 18, 18, 18;
+  --secondary-black: 30, 30, 30;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+/* 星星动画效果 */
+@keyframes twinkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+    box-shadow: 0 0 3px 1px rgba(135, 206, 250, 0.4);
+  }
+  50% {
+    opacity: var(--brightness, 0.9);
+    transform: scale(1.1);
+    box-shadow: 0 0 6px 2px rgba(135, 206, 250, 0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+    box-shadow: 0 0 3px 1px rgba(135, 206, 250, 0.4);
+  }
+}
+
+@keyframes mainStarTwinkle {
+  0% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px 4px rgba(212, 175, 55, 0.9);
+  }
+  100% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+  }
+}
+
+@keyframes lineTwinkle {
+  0% {
+    opacity: 0.5;
+    filter: blur(1px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 0.5;
+    filter: blur(1px);
+  }
+}
+
+/* 页面过渡动画 */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+@layer components {
+  .gold-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-gold to-secondary-gold;
+  }
+  
+  .gold-border {
+    @apply border border-primary-gold/40 hover:border-primary-gold/70 transition-colors duration-300;
+  }
+  
+  .gold-glow {
+    @apply shadow-[0_0_15px_rgba(212,175,55,0.2)];
+  }
+  
+  .black-gold-gradient {
+    @apply bg-gradient-to-b from-primary-black to-secondary-black border-primary-gold border;
+  }
+  
+  .fancy-input {
+    @apply bg-secondary-black/60 backdrop-blur-sm border-b-2 border-primary-gold/60 px-4 py-2 text-white outline-none focus:border-secondary-gold focus:border-primary-gold transition-colors duration-300 w-full rounded-t-md;
+  }
+  
+  .gold-button {
+    @apply px-6 py-3 bg-primary-gold text-primary-black font-bold rounded hover:bg-secondary-gold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+  }
+  
+  .outlined-button {
+    @apply px-6 py-3 border-2 border-primary-gold/70 text-primary-gold font-bold rounded hover:bg-primary-gold/10 hover:border-primary-gold transition-colors duration-300;
+  }
+} 

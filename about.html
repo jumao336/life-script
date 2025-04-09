@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于我们 | 人生剧本生成器</title>
+  <style>
+    :root {
+      --primary-black: #121212;
+      --secondary-black: #1e1e1e;
+      --accent-black: #2d2d2d;
+      --primary-gold: #d4af37;
+      --secondary-gold: #ffdf00;
+      --accent-gold: #f0c75e;
+      --star-color: #ffffff;
+      --line-color: rgba(255, 255, 255, 0.8);
+      --bg-blue: #030b2e;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+      background-color: var(--bg-blue);
+      color: white;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* 星空背景 */
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+      background: #000000; /* 纯黑色背景 */
+    }
+    
+    /* 星星样式 */
+    .star {
+      position: absolute;
+      background-color: rgba(220, 235, 255, 0.9); /* 蓝白色调 */
+      border-radius: 50%;
+      box-shadow: 0 0 5px 1px rgba(135, 206, 250, 0.6); /* 蓝色光晕 */
+      animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+    }
+    
+    @keyframes twinkle {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+        box-shadow: 0 0 3px 1px rgba(135, 206, 250, 0.4);
+      }
+      50% {
+        opacity: var(--brightness, 0.9);
+        transform: scale(1.1);
+        box-shadow: 0 0 6px 2px rgba(135, 206, 250, 0.8);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.5);
+        box-shadow: 0 0 3px 1px rgba(135, 206, 250, 0.4);
+      }
+    }
+    
+    /* 星座连线动画 */
+    @keyframes lineTwinkle {
+      0% {
+        opacity: 0.5;
+        filter: blur(1px);
+      }
+      50% {
+        opacity: 1;
+        filter: blur(0.5px);
+      }
+      100% {
+        opacity: 0.5;
+        filter: blur(1px);
+      }
+    }
+    
+    .constellation-line {
+      position: absolute;
+      height: 1.5px; /* 减少线条高度 */
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0), rgba(212, 175, 55, 0.7), rgba(212, 175, 55, 0));
+      transform-origin: 0 0;
+      pointer-events: none;
+      box-shadow: 0 0 5px 1px rgba(212, 175, 55, 0.5);
+      animation: lineTwinkle 5s infinite;
+    }
+    
+    /* 主星特效 */
+    .main-star {
+      position: absolute;
+      background-color: rgba(245, 235, 185, 1); /* 主星为金色 */
+      border-radius: 50%;
+      box-shadow: 0 0 15px 5px rgba(212, 175, 55, 0.9); /* 金色光晕 */
+      animation: mainStarTwinkle var(--duration, 4s) infinite var(--delay, 0s);
+      z-index: 2;
+    }
+    
+    @keyframes mainStarTwinkle {
+      0% {
+        opacity: 0.8;
+        box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+      }
+      50% {
+        opacity: 1;
+        box-shadow: 0 0 15px 4px rgba(212, 175, 55, 0.9);
+      }
+      100% {
+        opacity: 0.8;
+        box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+      }
+    }
+    
+    /* 渐入动画 */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-out forwards;
+    }
+    
+    /* 渐入动画（延迟版） */
+    .animate-fadeIn-delay-1 {
+      animation: fadeIn 1s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+    
+    .animate-fadeIn-delay-2 {
+      animation: fadeIn 1s ease-out 0.6s forwards;
+      opacity: 0;
+    }
+    
+    .animate-fadeIn-delay-3 {
+      animation: fadeIn 1s ease-out 0.9s forwards;
+      opacity: 0;
+    }
+    
+    /* 布局样式 */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* 导航栏 */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+      background-color: rgba(10, 10, 25, 0.8);
+      backdrop-filter: blur(10px);
+    }
+    
+    header.scrolled {
+      background-color: rgba(10, 10, 25, 0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: white;
+      transition: color 0.3s;
+    }
+    
+    .logo:hover {
+      color: var(--primary-gold);
+    }
+    
+    .logo-icon {
+      font-size: 24px;
+      color: var(--primary-gold);
+    }
+    
+    .logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 40px;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary-gold);
+    }
+    
+    /* 主要内容 */
+    .about-section {
+      padding-top: 150px;
+      margin-top: -30px;
+      padding-bottom: 80px;
+    }
+    
+    .about-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    
+    .about-header h2 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .about-header p {
+      font-size: 18px;
+      color: #aaa;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .about-content {
+      background-color: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+    
+    .about-content h3 {
+      font-size: 24px;
+      color: var(--primary-gold);
+      margin-bottom: 20px;
+    }
+    
+    .about-content p {
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+    
+    .team-section {
+      margin-top: 60px;
+    }
+    
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .team-member {
+      background-color: rgba(40, 40, 40, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 8px;
+      padding: 25px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .team-member:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .member-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      background-color: var(--accent-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: var(--primary-gold);
+    }
+    
+    .member-name {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .member-role {
+      font-size: 16px;
+      color: var(--accent-gold);
+      margin-bottom: 15px;
+    }
+    
+    .member-bio {
+      font-size: 14px;
+      color: #aaa;
+    }
+    
+    /* 页脚 */
+    footer {
+      background-color: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      padding: 60px 0 30px;
+      margin-top: auto;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-col h3 {
+      font-size: 18px;
+      color: var(--primary-gold);
+      margin-bottom: 20px;
+    }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-col a {
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+    }
+    
+    .footer-col a:hover {
+      color: var(--primary-gold);
+    }
+    
+    .footer-col a .icon {
+      color: var(--primary-gold);
+      margin-right: 8px;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid #333;
+      color: #666;
+    }
+    
+    /* 响应式样式 */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .about-content {
+        padding: 30px 20px;
+      }
+      
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 星空背景 -->
+  <div id="stars-container" class="stars-container">
+    <div class="stars"></div>
+  </div>
+  
+  <!-- 页面内容 -->
+  <div class="content-wrapper">
+    <!-- 导航栏 -->
+    <header id="header">
+      <div class="navbar">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">✧</div>
+          <h1>人生剧本</h1>
+        </a>
+        
+        <nav class="nav-links">
+          <a href="index.html" class="nav-link">首页</a>
+          <a href="about.html" class="nav-link">关于</a>
+          <a href="examples.html" class="nav-link">示例</a>
+        </nav>
+      </div>
+    </header>
+    
+    <!-- 关于部分 -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-header animate-fadeIn">
+          <h2>关于人生剧本</h2>
+          <p>了解我们的故事和使命</p>
+        </div>
+        
+        <div class="about-content animate-fadeIn-delay-1">
+          <h3>我们的故事</h3>
+          <p>
+            "人生剧本"起源于一个简单的想法：每个人的人生都是一个独特的故事，充满了起伏、挑战和胜利。我们相信，通过反思过去、审视现在和展望未来，每个人都能更好地理解自己的人生轨迹，发现内心深处的愿望和潜能。
+          </p>
+          <p>
+            我们的创始团队由来自心理学、文学和技术背景的专业人士组成。他们将各自领域的专业知识融合在一起，创造了这个独特的平台，帮助人们探索和讲述自己的人生故事。
+          </p>
+          
+          <h3>我们的使命</h3>
+          <p>
+            我们致力于通过人工智能和创意写作，帮助每个人探索自己生命中的无限可能性。我们的使命是：
+          </p>
+          <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <li>鼓励自我反思和个人成长</li>
+            <li>提供新的视角和创意思路</li>
+            <li>激发人们重新审视自己的人生目标和价值</li>
+            <li>创造一个安全、温馨的空间让人们探索内心世界</li>
+          </ul>
+          
+          <h3>我们的技术</h3>
+          <p>
+            "人生剧本"结合了先进的自然语言处理技术和经过精心设计的创意写作框架。我们的系统基于用户提供的信息，生成个性化的人生剧本，每一个剧本都是独一无二的，就像每个人的人生一样。
+          </p>
+          <p>
+            我们注重隐私保护，所有用户提供的信息仅用于生成个人剧本，不会用于其他目的或与第三方共享。
+          </p>
+          
+          <div class="team-section">
+            <h3>我们的团队</h3>
+            <div class="team-grid">
+              <div class="team-member">
+                <div class="member-avatar">✦</div>
+                <h4 class="member-name">李明</h4>
+                <p class="member-role">创始人 & 心理学家</p>
+                <p class="member-bio">拥有临床心理学博士学位，专注于叙事治疗和人格心理学研究。相信每个人的故事都值得被倾听和珍藏。</p>
+              </div>
+              
+              <div class="team-member">
+                <div class="member-avatar">✧</div>
+                <h4 class="member-name">张华</h4>
+                <p class="member-role">技术总监</p>
+                <p class="member-bio">人工智能和自然语言处理专家，致力于将先进技术融入创意表达和人文关怀中。</p>
+              </div>
+              
+              <div class="team-member">
+                <div class="member-avatar">✴</div>
+                <h4 class="member-name">王芳</h4>
+                <p class="member-role">创意总监</p>
+                <p class="member-bio">资深编剧和作家，相信文字的力量可以改变人生，热衷于帮助人们找到并讲述自己的故事。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h3>关于我们</h3>
+            <p>
+              人生剧本生成器致力于帮助人们探索人生的无限可能性，发现自我价值，实现个人成长。
+            </p>
+          </div>
+          
+          <div class="footer-col">
+            <h3>快速链接</h3>
+            <ul>
+              <li><a href="index.html">首页</a></li>
+              <li><a href="about.html">关于</a></li>
+              <li><a href="examples.html">示例</a></li>
+              <li><a href="#">常见问题</a></li>
+              <li><a href="#">联系我们</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-col">
+            <h3>联系方式</h3>
+            <ul>
+              <li>
+                <a href="mailto:contact@lifescript.com">
+                  <span class="icon">✉</span> contact@lifescript.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+86123456789">
+                  <span class="icon">☎</span> +86 123 456 789
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <span class="icon">♦</span> 社交媒体
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; <script>document.write(new Date().getFullYear())</script> 人生剧本生成器. 保留所有权利.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 滚动监听
+      const header = document.getElementById('header');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 10) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+      
+      // 创建星空背景
+      createStarryBackground();
+      
+      // 星空背景函数
+      function createStarryBackground() {
+        const container = document.getElementById('stars-container');
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // 创建背景星星
+        const starCount = Math.floor(width * height / 6000);
+        
+        for (let i = 0; i < starCount; i++) {
+          createStar(container, width, height, 'small');
+        }
+        
+        // 添加一些大星星
+        const largeStarCount = Math.floor(starCount * 0.1);
+        
+        for (let i = 0; i < largeStarCount; i++) {
+          createStar(container, width, height, 'large');
+        }
+        
+        // 添加星座
+        createConstellation(container, width, height);
+      }
+      
+      function createStar(container, width, height, size) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // 随机位置
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        
+        // 根据大小设置尺寸
+        let starSize, colors, brightness, duration;
+        
+        if (size === 'large') {
+          starSize = Math.random() * 2 + 4; // 4-6px
+          colors = [
+            'rgba(220, 240, 255, 1)',
+            'rgba(190, 225, 255, 1)',
+            'rgba(160, 210, 255, 1)'
+          ];
+          brightness = Math.random() * 0.2 + 0.8;
+          duration = Math.random() * 6 + 4;
+        } else {
+          starSize = Math.random() * 2 + 2; // 2-4px
+          colors = [
+            'rgba(220, 235, 255, 0.9)',
+            'rgba(200, 220, 255, 0.9)',
+            'rgba(180, 210, 255, 0.9)',
+            'rgba(240, 245, 255, 0.9)'
+          ];
+          brightness = Math.random() * 0.4 + 0.6;
+          duration = Math.random() * 5 + 3;
+        }
+        
+        // 设置样式
+        star.style.width = `${starSize}px`;
+        star.style.height = `${starSize}px`;
+        star.style.left = `${x}px`;
+        star.style.top = `${y}px`;
+        star.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // 设置动画参数
+        star.style.setProperty('--brightness', brightness);
+        star.style.setProperty('--duration', `${duration}s`);
+        star.style.setProperty('--delay', `${Math.random() * 5}s`);
+        
+        container.appendChild(star);
+      }
+      
+      function createConstellation(container, width, height) {
+        // 天秤座放在右上角
+        const starPositions = [
+          { x: 0.65, y: 0.25, size: 4 },
+          { x: 0.7, y: 0.2, size: 3 },
+          { x: 0.75, y: 0.25, size: 3.5 },
+          { x: 0.7, y: 0.3, size: 4 },
+          { x: 0.65, y: 0.35, size: 3 },
+          { x: 0.75, y: 0.35, size: 3 }
+        ];
+        
+        const lines = [[0,1], [1,2], [2,3], [3,4], [4,0], [3,5], [5,2]];
+        
+        // 创建星星
+        starPositions.forEach((pos, index) => {
+          const star = document.createElement('div');
+          star.classList.add('main-star');
+          
+          const x = pos.x * width;
+          const y = pos.y * height;
+          const size = pos.size * 1.5;
+          
+          star.style.width = `${size}px`;
+          star.style.height = `${size}px`;
+          star.style.left = `${x}px`;
+          star.style.top = `${y}px`;
+          
+          const duration = Math.random() * 3 + 4;
+          const delay = Math.random() * 2;
+          
+          star.style.setProperty('--duration', `${duration}s`);
+          star.style.setProperty('--delay', `${delay}s`);
+          
+          container.appendChild(star);
+        });
+        
+        // 创建连线
+        lines.forEach(link => {
+          const pos1 = starPositions[link[0]];
+          const pos2 = starPositions[link[1]];
+          
+          const x1 = pos1.x * width;
+          const y1 = pos1.y * height;
+          const x2 = pos2.x * width;
+          const y2 = pos2.y * height;
+          
+          const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+          const angle = Math.atan2(y2 - y1, x2 - x1);
+          
+          const line = document.createElement('div');
+          line.classList.add('constellation-line');
+          
+          line.style.width = `${length}px`;
+          line.style.left = `${x1}px`;
+          line.style.top = `${y1}px`;
+          line.style.transform = `rotate(${angle}rad)`;
+          
+          container.appendChild(line);
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

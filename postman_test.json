@@ -1,0 +1,42 @@
+{
+  "info": {
+    "name": "DeepSeek API Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Generate Script",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "userData": {
+              "name": "测试用户",
+              "age": "25",
+              "gender": "男",
+              "currentLocation": "北京",
+              "zodiac": "天秤座",
+              "mbti": "INFP",
+              "regrets": "没有早点开始学习编程",
+              "lostPeople": "错过了一次创业机会",
+              "memories": "第一次完成项目的成就感",
+              "currentTroubles": "工作和学习的平衡",
+              "hasCried": "true",
+              "wantToChange": "想要提升技术能力",
+              "futureSelf": "成为一名优秀的开发者",
+              "beliefs": "持续学习，永不放弃"
+            }
+          }
+        },
+        "url": "http://localhost:3001/api/generate"
+      }
+    }
+  ]
+} 

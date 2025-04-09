@@ -1,0 +1,28 @@
+{
+    "mcpServers": {
+      "github.com/modelcontextprotocol/servers/tree/main/src/github": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "npx",
+          "-y",
+          "@modelcontextprotocol/server-github"
+        ],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "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"
+        },
+        "disabled": false,
+        "autoApprove": []
+      },"filesystem": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\86139"
+      ]
+    }
+    }
+  }
+  
