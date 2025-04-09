@@ -19,4 +19,13 @@ logs/
 
 # System Files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Build files
+.next/
+dist/
+build/
+
+# Cache
+.cache/
+.npm/ 
