@@ -20,15 +20,15 @@
     }
     
     :root {
-      --primary-black: #121212;
-      --secondary-black: #1e1e1e;
-      --accent-black: #2d2d2d;
-      --primary-gold: #d4af37;
-      --secondary-gold: #ffdf00;
-      --accent-gold: #f0c75e;
+      --primary-black: #020724;  /* 更深的蓝色黑底 */
+      --secondary-black: #041033;  /* 深蓝色 */
+      --accent-black: #0c1e4b;  /* 蓝黑色 */
+      --primary-blue: #4d90fe;  /* 主蓝色 */
+      --secondary-blue: #8ec5fc;  /* 亮蓝色 */
+      --accent-blue: #3f79fe;  /* 深蓝色 */
       --star-color: #ffffff;
-      --line-color: rgba(255, 255, 255, 0.8);
-      --bg-blue: #030b2e;
+      --line-color: rgba(77, 144, 254, 0.8);  /* 蓝色线条 */
+      --bg-blue: #000b2e;  /* 更深的背景蓝 */
     }
     
     * {
@@ -59,9 +59,9 @@
     
     .mouse-star {
       position: absolute;
-      background-color: var(--primary-gold);
+      background-color: var(--primary-blue);
       border-radius: 50%;
-      box-shadow: 0 0 8px 2px rgba(212, 175, 55, 0.7);
+      box-shadow: 0 0 8px 2px rgba(77, 144, 254, 0.7);
       opacity: 0.9;
       transform-origin: center center;
       animation: mouseStarTwinkle 3s infinite;
@@ -70,22 +70,22 @@
     @keyframes mouseStarTwinkle {
       0% {
         opacity: 0.6;
-        box-shadow: 0 0 6px 1px rgba(212, 175, 55, 0.5);
+        box-shadow: 0 0 6px 1px rgba(77, 144, 254, 0.5);
       }
       50% {
         opacity: 1;
-        box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.8);
+        box-shadow: 0 0 10px 3px rgba(77, 144, 254, 0.8);
       }
       100% {
         opacity: 0.6;
-        box-shadow: 0 0 6px 1px rgba(212, 175, 55, 0.5);
+        box-shadow: 0 0 6px 1px rgba(77, 144, 254, 0.5);
       }
     }
     
     .mouse-line {
       position: absolute;
       height: 1px;
-      background: linear-gradient(to right, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.8), rgba(212, 175, 55, 0.1));
+      background: linear-gradient(to right, rgba(77, 144, 254, 0.1), rgba(77, 144, 254, 0.8), rgba(77, 144, 254, 0.1));
       transform-origin: 0 0;
       pointer-events: none;
     }
@@ -102,9 +102,9 @@
     
     .astrolabe-ring {
       position: absolute;
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      border: 1px solid rgba(77, 144, 254, 0.3);
       border-radius: 50%;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+      box-shadow: 0 0 15px rgba(77, 144, 254, 0.15);
       transform-origin: center center;
     }
     
@@ -136,17 +136,17 @@
       position: absolute;
       width: 6px;
       height: 6px;
-      background-color: var(--primary-gold);
+      background-color: var(--primary-blue);
       border-radius: 50%;
       top: 37px;
       left: 37px;
-      box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+      box-shadow: 0 0 10px 3px rgba(77, 144, 254, 0.7);
       animation: pulse 3s ease-in-out infinite;
     }
     
     .astrolabe-symbol {
       position: absolute;
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       font-size: 8px;
       transform-origin: center center;
       animation: symbol-twinkle 4s infinite;
@@ -175,10 +175,10 @@
     .astrolabe-line {
       position: absolute;
       height: 2px;
-      background: linear-gradient(90deg, rgba(212, 175, 55, 0), rgba(212, 175, 55, 0.7), rgba(212, 175, 55, 0));
+      background: linear-gradient(90deg, rgba(77, 144, 254, 0), rgba(77, 144, 254, 0.7), rgba(77, 144, 254, 0));
       transform-origin: 0 0;
       pointer-events: none;
-      box-shadow: 0 0 5px rgba(212, 175, 55, 0.6);
+      box-shadow: 0 0 5px rgba(77, 144, 254, 0.6);
       animation: lineFadeIn 4s ease forwards;
     }
     
@@ -265,10 +265,10 @@
     .constellation-line {
       position: absolute;
       height: 1.5px; /* 减少线条高度 */
-      background: linear-gradient(90deg, rgba(212, 175, 55, 0), rgba(212, 175, 55, 0.7), rgba(212, 175, 55, 0));
+      background: linear-gradient(90deg, rgba(77, 144, 254, 0), rgba(77, 144, 254, 0.7), rgba(77, 144, 254, 0));
       transform-origin: 0 0;
       pointer-events: none;
-      box-shadow: 0 0 5px 1px rgba(212, 175, 55, 0.5); /* 减轻线条阴影强度 */
+      box-shadow: 0 0 5px 1px rgba(77, 144, 254, 0.5); /* 减轻线条阴影强度 */
       animation: lineTwinkle var(--line-duration, 5s) infinite var(--line-delay, 0s);
     }
     
@@ -277,7 +277,7 @@
       position: absolute;
       background-color: rgba(245, 235, 185, 1); /* 保留主星为金色 */
       border-radius: 50%;
-      box-shadow: 0 0 15px 5px rgba(212, 175, 55, 0.9); /* 保留主星为金色光晕 */
+      box-shadow: 0 0 15px 5px rgba(77, 144, 254, 0.9); /* 保留主星为金色光晕 */
       animation: mainStarTwinkle var(--duration, 4s) infinite var(--delay, 0s);
       z-index: 2;
     }
@@ -285,15 +285,15 @@
     @keyframes mainStarTwinkle {
       0% {
         opacity: 0.8;
-        box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+        box-shadow: 0 0 10px 3px rgba(77, 144, 254, 0.7);
       }
       50% {
         opacity: 1;
-        box-shadow: 0 0 15px 4px rgba(212, 175, 55, 0.9); /* 适度减弱光晕强度 */
+        box-shadow: 0 0 15px 4px rgba(77, 144, 254, 0.9); /* 适度减弱光晕强度 */
       }
       100% {
         opacity: 0.8;
-        box-shadow: 0 0 10px 3px rgba(212, 175, 55, 0.7);
+        box-shadow: 0 0 10px 3px rgba(77, 144, 254, 0.7);
       }
     }
     
@@ -310,7 +310,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      border-bottom: 1px solid rgba(77, 144, 254, 0.2);
       background-color: rgba(3, 11, 46, 0.8);
       backdrop-filter: blur(8px);
     }
@@ -331,14 +331,14 @@
     
     .logo-icon {
       font-size: 24px;
-      color: var(--primary-gold);
+      color: var(--primary-blue);
     }
     
     .logo h1 {
       font-family: 'Ma Shan Zheng', 'YanShiYouRanXiaoKai', 'Microsoft YaHei', sans-serif;
       font-size: 24px;
       font-weight: 700;
-      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      background: linear-gradient(to right, var(--secondary-blue), var(--primary-blue));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -351,13 +351,13 @@
     }
     
     nav a {
-      color: white;
+      color: #bbbbbb;  /* 浅灰色导航文字 */
       text-decoration: none;
       transition: color 0.3s;
     }
     
     nav a:hover {
-      color: var(--primary-gold);
+      color: var(--primary-blue);
     }
     
     .hero {
@@ -382,7 +382,7 @@
       right: 0;
       width: 33%;
       height: 33%;
-      background-color: rgba(212, 175, 55, 0.05);
+      background-color: rgba(77, 144, 254, 0.05);
       border-radius: 50%;
       filter: blur(60px);
     }
@@ -393,7 +393,7 @@
       left: 0;
       width: 25%;
       height: 25%;
-      background-color: rgba(212, 175, 55, 0.05);
+      background-color: rgba(77, 144, 254, 0.05);
       border-radius: 50%;
       filter: blur(60px);
     }
@@ -437,7 +437,7 @@
     
     .hero .subtitle {
       font-size: 36px;  /* 增大英文字体大小 */
-      color: var(--primary-gold);
+      color: #ffffff;  /* 白色副标题 */
       margin-bottom: 40px;
       font-weight: 500;
       letter-spacing: 2px;
@@ -446,7 +446,7 @@
     
     .hero p {
       font-size: 20px;
-      color: #aaa;
+      color: #cccccc;  /* 浅灰色正文 */
       margin-bottom: 40px;
       max-width: 600px;
       margin-left: auto;
@@ -472,21 +472,21 @@
     }
     
     .btn-primary {
-      background-color: var(--primary-gold);
-      color: var(--primary-black);
+      background-color: #4d90fe;  /* 亮蓝色按钮 */
+      color: #ffffff;
     }
     
     .btn-primary:hover {
-      background-color: var(--secondary-gold);
+      background-color: #5da0ff;  /* 略微更亮的蓝色 */
     }
     
     .btn-outline {
-      border: 2px solid var(--primary-gold);
-      color: var(--primary-gold);
+      border: 2px solid var(--primary-blue);
+      color: var(--primary-blue);
     }
     
     .btn-outline:hover {
-      background-color: rgba(212, 175, 55, 0.1);
+      background-color: rgba(77, 144, 254, 0.1);
     }
     
     .features {
@@ -503,7 +503,7 @@
       font-size: 36px;
       font-weight: 700;
       margin-bottom: 16px;
-      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -511,7 +511,7 @@
     
     .section-header p {
       font-size: 20px;
-      color: #aaa;
+      color: #cccccc;  /* 浅灰色正文 */
       max-width: 600px;
       margin: 0 auto;
     }
@@ -526,7 +526,7 @@
       padding: 24px;
       border-radius: 8px;
       background: linear-gradient(to bottom, var(--primary-black), var(--secondary-black));
-      border: 1px solid var(--primary-gold);
+      border: 1px solid var(--primary-blue);
       transition: transform 0.3s;
     }
     
@@ -536,7 +536,7 @@
     
     .feature-icon {
       font-size: 36px;
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       margin-bottom: 16px;
     }
     
@@ -546,7 +546,7 @@
     }
     
     .feature-card p {
-      color: #aaa;
+      color: #cccccc;  /* 浅灰色正文 */
     }
     
     .process {
@@ -556,7 +556,7 @@
     .process-steps {
       max-width: 800px;
       margin: 0 auto;
-      border-left: 2px solid rgba(212, 175, 55, 0.3);
+      border-left: 2px solid rgba(77, 144, 254, 0.3);
       padding-left: 30px;
     }
     
@@ -566,7 +566,7 @@
 
     .section-title {
       font-size: 36px;
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       text-align: center;
       margin-bottom: 60px;
     }
@@ -583,11 +583,11 @@
       height: 60px;
       border-radius: 50%;
       background-color: transparent;
-      border: 2px solid var(--primary-gold);
+      border: 2px solid var(--primary-blue);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       font-size: 24px;
       margin-right: 40px;
       flex-shrink: 0;
@@ -601,7 +601,7 @@
     }
 
     .step h3 {
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       font-size: 24px;
       margin: 0;
       margin-right: 20px;
@@ -609,7 +609,7 @@
     }
 
     .step p {
-      color: #fff;
+      color: #cccccc;  /* 浅灰色正文 */
       font-size: 24px;
       margin: 0;
       white-space: nowrap;
@@ -625,13 +625,13 @@
     .cta h2 {
       font-size: 36px;  /* 调整标题大小 */
       margin-bottom: 30px;  /* 增加标题下方间距 */
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       font-weight: 500;
     }
     
     .cta p {
       font-size: 20px;
-      color: #aaa;
+      color: #cccccc;  /* 浅灰色正文 */
       margin-bottom: 50px;  /* 增加段落下方间距 */
       line-height: 1.8;  /* 增加行高 */
       max-width: 800px;  /* 限制文本宽度 */
@@ -649,7 +649,7 @@
 
     .cta .btn-primary:hover {
       transform: translateY(-2px);  /* 悬停时上移效果 */
-      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);  /* 添加悬停阴影 */
+      box-shadow: 0 5px 15px rgba(77, 144, 254, 0.3);  /* 添加悬停阴影 */
     }
     
     .cta .bg-effect .blob {
@@ -659,14 +659,14 @@
       transform: translate(-50%, -50%);
       width: 66%;
       height: 66%;
-      background-color: rgba(212, 175, 55, 0.1);
+      background-color: rgba(77, 144, 254, 0.1);
       border-radius: 50%;
       filter: blur(60px);
     }
     
     footer {
       background-color: var(--secondary-black);
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      border-top: 1px solid rgba(77, 144, 254, 0.2);
       padding: 60px 0 30px;
     }
     
@@ -679,12 +679,12 @@
     
     .footer-col h5 {
       font-size: 18px;
-      color: var(--primary-gold);
+      color: var(--primary-blue);
       margin-bottom: 20px;
     }
     
     .footer-col p {
-      color: #aaa;
+      color: #cccccc;  /* 浅灰色正文 */
       margin-bottom: 16px;
     }
     
@@ -697,13 +697,13 @@
     }
     
     .footer-col ul li a {
-      color: #aaa;
+      color: #bbbbbb;  /* 浅灰色链接 */
       text-decoration: none;
       transition: color 0.3s;
     }
     
     .footer-col ul li a:hover {
-      color: var(--primary-gold);
+      color: var(--primary-blue);
     }
     
     .social-links {
@@ -713,19 +713,19 @@
     
     .social-links a {
       font-size: 20px;
-      color: #aaa;
+      color: #bbbbbb;  /* 浅灰色社交链接 */
       transition: color 0.3s;
     }
     
     .social-links a:hover {
-      color: var(--primary-gold);
+      color: var(--primary-blue);
     }
     
     .copyright {
       text-align: center;
       padding-top: 30px;
       border-top: 1px solid #333;
-      color: #666;
+      color: #999999;  /* 稍深的灰色 */
     }
     
     @media (max-width: 768px) {
@@ -1220,14 +1220,14 @@
               
               // 使用金色线条，但是线条更细
               const lineColors = [
-                'linear-gradient(90deg, rgba(212, 175, 55, 0), rgba(212, 175, 55, 0.7), rgba(212, 175, 55, 0))',
-                'linear-gradient(90deg, rgba(220, 180, 60, 0), rgba(220, 180, 60, 0.7), rgba(220, 180, 60, 0))',
-                'linear-gradient(90deg, rgba(205, 170, 50, 0), rgba(205, 170, 50, 0.7), rgba(205, 170, 50, 0))'
+                'linear-gradient(90deg, rgba(77, 144, 254, 0), rgba(77, 144, 254, 0.7), rgba(77, 144, 254, 0))',
+                'linear-gradient(90deg, rgba(85, 160, 255, 0), rgba(85, 160, 255, 0.7), rgba(85, 160, 255, 0))',
+                'linear-gradient(90deg, rgba(70, 120, 255, 0), rgba(70, 120, 255, 0.7), rgba(70, 120, 255, 0))'
               ];
               line.style.background = lineColors[Math.floor(Math.random() * lineColors.length)];
               
               // 减轻线条阴影强度
-              line.style.boxShadow = '0 0 5px 1px rgba(212, 175, 55, 0.5)';
+              line.style.boxShadow = '0 0 5px 1px rgba(77, 144, 254, 0.5)';
               
               constellationContainer.appendChild(line);
             });
@@ -1455,17 +1455,17 @@
       // 添加一些特效：当鼠标点击时，星盘发光
       document.addEventListener('mousedown', function() {
         // 增加发光效果
-        ring1.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.4)';
-        ring2.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.4)';
-        ring3.style.boxShadow = '0 0 15px rgba(212, 175, 55, 0.4)';
-        center.style.boxShadow = '0 0 15px 5px rgba(212, 175, 55, 0.9)';
+        ring1.style.boxShadow = '0 0 25px rgba(77, 144, 254, 0.4)';
+        ring2.style.boxShadow = '0 0 20px rgba(77, 144, 254, 0.4)';
+        ring3.style.boxShadow = '0 0 15px rgba(77, 144, 254, 0.4)';
+        center.style.boxShadow = '0 0 15px 5px rgba(77, 144, 254, 0.9)';
         
         // 3秒后恢复
         setTimeout(function() {
           ring1.style.boxShadow = '';
           ring2.style.boxShadow = '';
           ring3.style.boxShadow = '';
-          center.style.boxShadow = '0 0 10px 3px rgba(212, 175, 55, 0.7)';
+          center.style.boxShadow = '0 0 10px 3px rgba(77, 144, 254, 0.7)';
         }, 800);
       });
     });
