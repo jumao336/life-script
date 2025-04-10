@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <!-- 添加Orbitron字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- 预加载字体文件 -->
   <link rel="preload" href="./fonts/演示悠然小楷.ttf" as="font" type="font/ttf" crossorigin>
   <style>
@@ -437,11 +439,16 @@
     
     .hero .subtitle {
       font-size: 36px;  /* 增大英文字体大小 */
-      color: #ffffff;  /* 白色副标题 */
+      color: transparent;  /* 改为透明，使用渐变色 */
       margin-bottom: 40px;
       font-weight: 500;
-      letter-spacing: 2px;
+      letter-spacing: 4px;  /* 增加字母间距 */
       text-transform: uppercase;
+      font-family: 'Orbitron', sans-serif;  /* 使用Orbitron字体 */
+      background: linear-gradient(to bottom, #8ec5fc 0%, #4d90fe 50%, #3f79fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 0 10px rgba(77, 144, 254, 0.3);
     }
     
     .hero p {
