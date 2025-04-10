@@ -411,14 +411,28 @@
       font-weight: 400;
       margin-bottom: 24px;
       line-height: 1.2;
+      color: transparent;
+      background: linear-gradient(to bottom, #8ec5fc 0%, #4d90fe 50%, #3f79fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      text-shadow: 0 0 20px rgba(77, 144, 254, 0.5);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px rgba(77, 144, 254, 0.3), 0 0 20px rgba(77, 144, 254, 0.3);
+      }
+      to {
+        text-shadow: 0 0 20px rgba(77, 144, 254, 0.6), 0 0 30px rgba(77, 144, 254, 0.6);
+      }
     }
     
     .hero h2 .gradient-text {
-      background: linear-gradient(to right, var(--primary-gold), var(--secondary-gold));
+      background: linear-gradient(to bottom, #8ec5fc 0%, #4d90fe 50%, #3f79fe 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
     }
     
     .hero .subtitle {
