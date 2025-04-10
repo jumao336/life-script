@@ -1164,14 +1164,12 @@
           // 调用API
           try {
             console.log("连接到服务器...");
-            const response = await fetch('https://life-script-production.up.railway.app/api/generate', {
+            const response = await fetch('/api/proxy', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
               },
-              mode: 'cors',
-              credentials: 'include',
               body: JSON.stringify(userData),
             });
             
