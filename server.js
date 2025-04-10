@@ -24,34 +24,8 @@ function writeLog(message) {
     console.log(logMessage.trim());
 }
 
-// 配置 CORS - 更完整的设置
-const corsOptions = {
-  origin: function(origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:3000', 
-      'https://life-script-seven.vercel.app',
-      'https://life-script-git-master-jumaos-projects.vercel.app',
-      'https://life-script-qq9ch7kar-jumaos-projects.vercel.app'
-    ];
-    // 允许没有来源的请求（如移动应用程序或脚本直接访问）
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('不允许的来源: ' + origin), false);
-    }
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
-
-// 应用 CORS
-app.use(cors(corsOptions));
-
-// 特别处理 OPTIONS 请求
-app.options('*', cors(corsOptions));
+// CORS配置 - 允许所有跨域请求
+app.use(cors());
 
 // 解析JSON请求体
 app.use(express.json());
