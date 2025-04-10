@@ -24,8 +24,12 @@ function writeLog(message) {
     console.log(logMessage.trim());
 }
 
-// CORS配置 - 允许所有跨域请求
-app.use(cors());
+// 配置 CORS
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://life-script-seven.vercel.app', 'https://life-script-git-master-jumaos-projects.vercel.app'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 // 解析JSON请求体
 app.use(express.json());
