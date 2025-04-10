@@ -462,10 +462,9 @@
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       padding: 12px 24px;
-      border-radius: 4px;
-      font-weight: 600;
       text-decoration: none;
       transition: all 0.3s;
       cursor: pointer;
@@ -478,6 +477,30 @@
     
     .btn-primary:hover {
       background-color: #5da0ff;  /* 略微更亮的蓝色 */
+    }
+    
+    /* 添加新的圆形按钮样式，特定用于首页的开始创作按钮 */
+    .btn-circle {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background-color: #45c8dc;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(69, 200, 220, 0.4);
+      margin: 20px auto;
+    }
+    
+    .btn-circle:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(69, 200, 220, 0.5);
+      background-color: #3dbfd5;
     }
     
     .btn-outline {
@@ -795,7 +818,7 @@
       <p class="subtitle">life script</p>
       <p>通过AI，将你的人生经历转化为一个独特的故事。每个故事都是独一无二的，就像璀璨的星空中的每一颗星星。</p>
       <div class="btn-container">
-        <a href="create.html" class="btn btn-primary">开始创作</a>
+        <a href="create.html" class="btn-circle">开始创作</a>
       </div>
     </div>
   </section>
