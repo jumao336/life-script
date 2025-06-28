@@ -24,6 +24,37 @@ function writeLog(message) {
     console.log(logMessage.trim());
 }
 
+// 清理剧本内容，移除AI的思考过程
+function cleanScriptContent(content) {
+    if (!content) return content;
+    
+    // 移除常见的AI回复开头
+    const aiPrefixes = [
+        /^好的[，,]\s*我将按照您的要求[\s\S]*?以下内容是否符合您的预期[。\.][\s\S]*?(?=###|第一幕|\*\*|##)/,
+        /^好的[，,]\s*我将[\s\S]*?(?=###|第一幕|\*\*|##)/,
+        /^根据您提供的信息[\s\S]*?(?=###|第一幕|\*\*|##)/,
+        /^我将为您创作[\s\S]*?(?=###|第一幕|\*\*|##)/,
+        /^以下是[\s\S]*?(?=###|第一幕|\*\*|##)/,
+        /^让我[\s\S]*?(?=###|第一幕|\*\*|##)/
+    ];
+    
+    let cleanedContent = content;
+    
+    // 逐个移除AI回复前缀
+    for (const prefix of aiPrefixes) {
+        cleanedContent = cleanedContent.replace(prefix, '');
+    }
+    
+    // 移除开头的空白行
+    cleanedContent = cleanedContent.replace(/^\s+/, '');
+    
+    // 移除结尾的AI总结
+    cleanedContent = cleanedContent.replace(/\n\n如果您有其他想法[\s\S]*$/, '');
+    cleanedContent = cleanedContent.replace(/\n\n请您看看以下内容[\s\S]*$/, '');
+    
+    return cleanedContent.trim();
+}
+
 // CORS配置 - 允许所有跨域请求
 app.use(cors());
 
@@ -158,7 +189,7 @@ app.post('/api/generate', async (req, res) => {
                 method: 'post',
                 url: 'https://api.coze.cn/v1/workflow/run',
                 headers: {
-                    'Authorization': 'Bearer pat_iBlOfxvHOio8nY3BEBYX27Fo8Xebfafc2D4EiarvJr2sRKN8Rd2uRLa82FRRAHgo',
+                    'Authorization': 'Bearer pat_NDQ1a4nxLXf2ziTYxqSB1rjfjKNNMq5ndW9ml3psLV6jcE6eEKX2uOHL39dWxaY9',
                     'Content-Type': 'application/json'
                 },
                 data: cozeData,
@@ -187,7 +218,11 @@ app.post('/api/generate', async (req, res) => {
                     ? JSON.parse(cozeResponse.data.data) 
                     : cozeResponse.data.data;
                     
-                scriptContent = dataContent.output;
+                let rawContent = dataContent.output;
+                
+                // 清理AI的思考过程和回复语句
+                scriptContent = cleanScriptContent(rawContent);
+                
                 writeLog('成功解析剧本内容');
             } catch (parseError) {
                 writeLog(`解析剧本内容失败: ${parseError.message}`);
