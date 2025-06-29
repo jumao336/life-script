@@ -73,6 +73,11 @@ app.get('/api/test', (req, res) => {
     res.json({ message: '服务器正常运行' });
 });
 
+// 简单的健康检查接口（用于监控）
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
+
 // 模拟响应数据（用于API不可用时）- 直接存储剧本内容，不再嵌套JSON
 const sampleScriptContent = `
 
@@ -282,5 +287,6 @@ app.listen(PORT, () => {
     writeLog(`日志文件路径: ${logFile}`);
     console.log('可用的接口:');
     console.log('- GET /api/test - 测试服务器连接');
+    console.log('- GET /api/health - 健康检查（用于监控）');
     console.log('- POST /api/generate - 接收表单数据并调用Coze API');
 });
